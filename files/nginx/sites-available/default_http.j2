@@ -1,0 +1,10 @@
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        include snippets/acmetool.snippet.conf;
+
+        location ^~ / {
+                return 308 https://{{ inventory_hostname }}$request_uri;
+        }
+}

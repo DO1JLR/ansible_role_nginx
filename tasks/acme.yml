@@ -1,0 +1,38 @@
+---
+
+- name: Copy shell script to enable tls sites
+  copy:
+    src: 'files/acmetool/enable_tls.sh'
+    dest: '/etc/acme/hooks/enable_tls.sh'
+    owner: root
+    group: root
+    mode: 'u=rx,g=r,o='
+  tags:
+    - configuration
+    - acme
+
+
+- name: Get certificate for default server
+  command: acmetool want '{{ inventory_hostname }}'
+  args:
+    creates: '/var/lib/acme/live/{{ inventory_hostname }}'
+  tags:
+    - configuration
+    - acme
+    - certificates
+    - operation
+
+
+- name: Get certificates for all configured sites
+  #command: acmetool want '{{ site.name }}' '{{ site.altnames | default([]) | join(" ") }}'
+  command: acmetool want '{{ ([site.name] + (site.altnames | default([]) )) | join(" ") }}'
+  args:
+    creates: '/var/lib/acme/live/{{ site.name }}/'
+  with_items: '{{ nginx_sites }}'
+  loop_control:
+    loop_var: site
+  tags:
+    - configuration
+    - acme
+    - certificates
+    - operation

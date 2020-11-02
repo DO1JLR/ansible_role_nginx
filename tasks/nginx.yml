@@ -1,0 +1,77 @@
+---
+
+- name: Copy main nginx configuration file
+  copy:
+    src: 'nginx/nginx.conf'
+    dest: '/etc/nginx/'
+    owner: root
+    group: root
+    mode: 'u=rw,g=r,o=r'
+  notify:
+    - Reload nginx
+  tags:
+    - configuration
+    - nginx
+
+
+#- name: Create strong dhparams
+#  openssl_dhparam:
+#    path: '/etc/nginx/dhparam.pem'
+#    size: 4096
+#  notify:
+#    - Reload nginx
+#  tags:
+#    - configuration
+#    - nginx
+#    - dhparam
+
+
+- name: Create 'sites-available' directory
+  file:
+    path: '/etc/nginx/sites-available'
+    state: directory
+    owner: root
+    group: root
+    mode: 'u=rwx,g=rx,o=rx'
+  tags:
+    - configuration
+    - nginx
+
+
+- name: Create 'sites-enabled' directory
+  file:
+    path: '/etc/nginx/sites-enabled'
+    state: directory
+    owner: root
+    group: root
+    mode: 'u=rwx,g=rx,o=rx'
+  tags:
+    - configuration
+    - nginx
+
+
+- name: Create 'snippets' directory
+  file:
+    path: '/etc/nginx/snippets'
+    state: directory
+    owner: root
+    group: root
+    mode: 'u=rwx,g=rx,o=rx'
+  tags:
+    - configuration
+    - nginx
+
+
+- name: Copy nginx snippet files
+  copy:
+    src: 'files/nginx/snippets/{{ item }}'
+    dest: '/etc/nginx/snippets/{{ item }}'
+    owner: root
+    group: root
+    mode: 'u=rw,g=r,o=r'
+  with_items: '{{ snippet_files }}'
+  notify:
+    - Reload nginx
+  tags:
+    - configuration
+    - nginx

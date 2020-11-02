@@ -1,0 +1,19 @@
+---
+
+nginx_sites: {}
+
+#nginx_sites:
+#  - name: 'example.org'
+#    altnames:
+#      - 'www.example.org'
+#      - 'ftp.example.org'
+#    robots: 'robots_allow_all.txt'         Optional
+#    htaccess: 'htpasswd.example.org'       Optional
+
+
+snippet_files:
+  - 'acmetool.snippet.conf'
+  - 'tls_settings.snippet.conf'
+
+
+#default_robots_file: 'robots_disallow_all.txt'

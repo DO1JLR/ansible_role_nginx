@@ -1,0 +1,51 @@
+---
+
+- name: Install nginx
+  include_tasks: installation.yml
+  tags:
+    - repository
+    - installation
+
+
+- name: Configure nginx
+  include_tasks: nginx.yml
+  tags:
+    - configuration
+    - nginx
+    - dhparam
+
+
+- name: Start nginx webserver
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+  tags:
+    - operation
+    - nginx
+
+
+- name: Configure nginx default site
+  include_tasks: default_site.yml
+  tags:
+    - configuration
+    - nginx
+    - sites
+
+
+- name: Configure nginx sites
+  include_tasks: single_site.yml
+  with_items: '{{ nginx_sites }}'
+  loop_control:
+    loop_var: site
+  tags:
+    - configuration
+    - nginx
+    - sites
+
+
+- name: Configure acmetool and obtain certificates
+  include_tasks: acme.yml
+  tags:
+    - configuration
+    - acme

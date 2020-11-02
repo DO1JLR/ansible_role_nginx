@@ -1,0 +1,12 @@
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name {{ site.name }};
+
+        include snippets/acmetool.snippet.conf;
+
+        location ^~ / {
+                return 308 https://{{ site.name }}$request_uri;
+        }
+}

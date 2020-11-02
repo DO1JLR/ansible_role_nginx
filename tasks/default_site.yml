@@ -1,0 +1,57 @@
+---
+
+- name: Create default site plain http configuration
+  template:
+    src: 'files/nginx/sites-available/default_http.j2'
+    dest: '/etc/nginx/sites-available/{{ inventory_hostname }}_http'
+    owner: root
+    group: root
+    mode: 'u=rw,g=r,o=r'
+  notify:
+    - Reload nginx
+  tags:
+    - configuration
+    - nginx
+    - sites
+
+
+- name: Create default site tls https configuration
+  template:
+    src: 'files/nginx/sites-available/default_tls.j2'
+    dest: '/etc/nginx/sites-available/{{ inventory_hostname }}_tls'
+    owner: root
+    group: root
+    mode: 'u=rw,g=r,o=r'
+  notify:
+    - Reload nginx
+  tags:
+    - configuration
+    - nginx
+    - sites
+
+
+- name: Enable default site plain http configuration
+  file:
+    src: '/etc/nginx/sites-available/{{ inventory_hostname }}_http'
+    dest: '/etc/nginx/sites-enabled/{{ inventory_hostname }}_http'
+    state: link
+  notify:
+    - Reload nginx
+  tags:
+    - configuration
+    - nginx
+    - sites
+
+
+# Note: Done by acmetool after sucessfully obtaining a suitable certificate
+#- name: Enable default site configuration
+#  file:
+#    src: '/etc/nginx/sites-available/{{ inventory_hostname }}_tls'
+#    dest: '/etc/nginx/sites-enabled/{{ inventory_hostname }}_tls'
+#    state: link
+#  notify:
+#    - Reload nginx
+#  tags:
+#    - configuration
+#    - nginx
+#    - sites
