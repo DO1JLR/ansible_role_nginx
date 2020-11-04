@@ -50,6 +50,19 @@
     - nginx
 
 
+# Todo: Reconsider best practices
+- name: Remove default site config from package installation
+  file:
+    path: '{{ item }}'
+    state: absent
+  with_items:
+    - '/etc/nginx/sites-enabled/default'
+    - '/etc/nginx/sites-available/default'
+  tags:
+    - configuration
+    - nginx
+
+
 - name: Create 'snippets' directory
   file:
     path: '/etc/nginx/snippets'
