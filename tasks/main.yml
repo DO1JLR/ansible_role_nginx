@@ -44,6 +44,11 @@
     - sites
 
 
+# Restart nginx before doing acme stuff
+- name: Flush handlers to restart nginx now
+  meta: flush_handlers
+
+
 - name: Configure acmetool and obtain certificates
   include_tasks: acme.yml
   tags:
