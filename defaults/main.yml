@@ -7,13 +7,18 @@ nginx_sites: {}
 #    altnames:
 #      - 'www.example.org'
 #      - 'ftp.example.org'
-#    robots: 'robots_allow_all.txt'         Optional
-#    htaccess: 'htpasswd.example.org'       Optional
+#    robots: 'robots_allow_all.txt'         Optional, unimplemented
+#    htaccess: 'htpasswd.example.org'       Optional, unimplemented
+#    webroot:                               Optional, for use with 'webhost' role
+#       path                                Optional, for use with 'webhost' role
+#       user                                Optional, for use with 'webhost' role
+#       group                               Optional, for use with 'webhost' role
+#       mode                                Optional, for use with 'webhost' role
 
 
 snippet_files:
   - 'acmetool.snippet.conf'
-  - 'tls_settings.snippet.conf'
+  - 'tls_parameters.snippet.conf'
 
 
 #default_robots_file: 'robots_disallow_all.txt'

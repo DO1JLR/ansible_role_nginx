@@ -4,6 +4,8 @@ server {
 
         server_name {{ site.name }};
 
+        include snippets/logging_{{ site.name }}.snippet.conf;
+
         include snippets/acmetool.snippet.conf;
 
         location ^~ / {

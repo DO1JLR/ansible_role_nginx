@@ -34,34 +34,49 @@
     - sites
 
 
-#- name: Create '{{ site.name }}' site tls parameter configuration
-#  template:
-#    src: 'files/nginx/snippets/tls_certificate.snippet.conf'
-#    dest: '/etc/nginx/snippets/tls_certificate_{{ site.name }}.snippet.conf'
-#    owner: root
-#    group: root
-#    mode: 'u=rw,g=r,o=r'
-#  notify:
-#    - Reload nginx
-#  tags:
-#    - configuration
-#    - nginx
-#    - sites
+- name: Create '{{ site.name }}' site tls parameter configuration
+  template:
+    src: 'files/nginx/snippets/tls_parameters.snippet.conf'
+    dest: '/etc/nginx/snippets/tls_parameters_{{ site.name }}.snippet.conf'
+    owner: root
+    group: root
+    mode: 'u=rw,g=r,o=r'
+  notify:
+    - Reload nginx
+  tags:
+    - configuration
+    - nginx
+    - sites
 
 
-#- name: Create '{{ site.name }}' site logging configuration
-#  template:
-#    src: 'files/nginx/snippets/logging.snippet.conf'
-#    dest: '/etc/nginx/snippets/logging_{{ site.name }}.snippet.conf'
-#    owner: root
-#    group: root
-#    mode: 'u=rw,g=r,o=r'
-#  notify:
-#    - Reload nginx
-#  tags:
-#    - configuration
-#    - nginx
-#    - sites
+- name: Create '{{ site.name }}' site tls certificate configuration
+  template:
+    src: 'files/nginx/snippets/tls_certificate.snippet.conf'
+    dest: '/etc/nginx/snippets/tls_certificate_{{ site.name }}.snippet.conf'
+    owner: root
+    group: root
+    mode: 'u=rw,g=r,o=r'
+  notify:
+    - Reload nginx
+  tags:
+    - configuration
+    - nginx
+    - sites
+
+
+- name: Create '{{ site.name }}' site logging configuration
+  template:
+    src: 'files/nginx/snippets/logging.snippet.conf'
+    dest: '/etc/nginx/snippets/logging_{{ site.name }}.snippet.conf'
+    owner: root
+    group: root
+    mode: 'u=rw,g=r,o=r'
+  notify:
+    - Reload nginx
+  tags:
+    - configuration
+    - nginx
+    - sites
 
 
 #- name: Copy additional per site '{{ site.name }}' snippet files
