@@ -14,16 +14,29 @@
     - nginx
 
 
-#- name: Create strong dhparams
-#  openssl_dhparam:
-#    path: '/etc/nginx/dhparam.pem'
-#    size: 4096
-#  notify:
-#    - Reload nginx
-#  tags:
-#    - configuration
-#    - nginx
-#    - dhparam
+- name: Create 'private' directory
+  file:
+    path: '/etc/nginx/private'
+    state: directory
+    owner: root
+    group: root
+    mode: 'u=rwx,g=rx,o=rx'
+  tags:
+    - configuration
+    - nginx
+    - dhparam
+
+
+- name: Create new dhparam of size '{{ nginx__dhparam_size }}'
+  openssl_dhparam:
+    path: '/etc/nginx/private/dhparam.pem'
+    size: '{{ nginx__dhparam_size | mandatory }}'
+  notify:
+    - Reload nginx
+  tags:
+    - configuration
+    - nginx
+    - dhparam
 
 
 - name: Create 'sites-available' directory

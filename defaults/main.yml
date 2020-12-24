@@ -22,3 +22,6 @@ snippet_files:
 
 
 #default_robots_file: 'robots_disallow_all.txt'
+
+
+nginx__dhparam_size: 2048
