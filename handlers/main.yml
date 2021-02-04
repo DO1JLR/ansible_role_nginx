@@ -7,7 +7,7 @@
     state: restarted
 
 
-- name: Reload nginx
+- name: systemctl reload nginx
   systemd:
     name: 'nginx.service'
     daemon_reload: yes

@@ -1,6 +1,6 @@
 ---
-
 - name: Copy main nginx configuration file
+  become: true
   copy:
     src: 'nginx/nginx.conf'
     dest: '/etc/nginx/'
@@ -8,87 +8,64 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - Reload nginx
-  tags:
-    - configuration
-    - nginx
-
+    - systemctl reload nginx
 
 - name: Create 'private' directory
+  become: true
   file:
     path: '/etc/nginx/private'
     state: directory
     owner: root
     group: root
     mode: 'u=rwx,g=rx,o=rx'
-  tags:
-    - configuration
-    - nginx
-    - dhparam
-
 
 - name: Create new dhparam of size '{{ nginx__dhparam_size }}'
+  become: true
   openssl_dhparam:
     path: '/etc/nginx/private/dhparam.pem'
     size: '{{ nginx__dhparam_size | mandatory }}'
   notify:
-    - Reload nginx
-  tags:
-    - configuration
-    - nginx
-    - dhparam
-
+    - systemctl reload nginx
 
 - name: Create 'sites-available' directory
+  become: true
   file:
     path: '/etc/nginx/sites-available'
     state: directory
     owner: root
     group: root
     mode: 'u=rwx,g=rx,o=rx'
-  tags:
-    - configuration
-    - nginx
-
 
 - name: Create 'sites-enabled' directory
+  become: true
   file:
     path: '/etc/nginx/sites-enabled'
     state: directory
     owner: root
     group: root
     mode: 'u=rwx,g=rx,o=rx'
-  tags:
-    - configuration
-    - nginx
-
 
 # Todo: Reconsider best practices
 - name: Remove default site config from package installation
+  become: true
   file:
     path: '{{ item }}'
     state: absent
   with_items:
     - '/etc/nginx/sites-enabled/default'
     - '/etc/nginx/sites-available/default'
-  tags:
-    - configuration
-    - nginx
-
 
 - name: Create 'snippets' directory
+  become: true
   file:
     path: '/etc/nginx/snippets'
     state: directory
     owner: root
     group: root
     mode: 'u=rwx,g=rx,o=rx'
-  tags:
-    - configuration
-    - nginx
-
 
 - name: Copy nginx snippet files
+  become: true
   copy:
     src: 'files/nginx/snippets/{{ item }}'
     dest: '/etc/nginx/snippets/{{ item }}'
@@ -97,7 +74,4 @@
     mode: 'u=rw,g=r,o=r'
   with_items: '{{ snippet_files }}'
   notify:
-    - Reload nginx
-  tags:
-    - configuration
-    - nginx
+    - systemctl reload nginx
