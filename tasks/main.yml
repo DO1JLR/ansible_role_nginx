@@ -1,4 +1,8 @@
 ---
+- name: simple versionscheck
+  include_tasks: versioncheck.yml
+  when: submodules_versioncheck | bool
+
 - name: Install nginx
   include_tasks: installation.yml
 

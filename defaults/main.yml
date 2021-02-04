@@ -1,4 +1,6 @@
 ---
+# enable version check for this role? (true is recomended)
+submodules_versioncheck: false
 
 nginx_sites: {}
 
