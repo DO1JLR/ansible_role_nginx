@@ -15,8 +15,8 @@ nginx_sites: {}
 #       group                               Optional, for use with 'webhost' role
 #       mode                                Optional, for use with 'webhost' role
 
-
-snippet_files:
+nginx__snippet_path: 'files/nginx/snippets/'
+nginx__snippet_files:
   - 'acmetool.snippet.conf'
   - 'tls_parameters.snippet.conf'
 

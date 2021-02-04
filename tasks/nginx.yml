@@ -67,11 +67,11 @@
 - name: Copy nginx snippet files
   become: true
   copy:
-    src: 'files/nginx/snippets/{{ item }}'
+    src: '{{ nginx__snippet_path }}{{ item }}'
     dest: '/etc/nginx/snippets/{{ item }}'
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
-  with_items: '{{ snippet_files }}'
+  with_items: '{{ nginx__snippet_files }}'
   notify:
     - systemctl reload nginx
