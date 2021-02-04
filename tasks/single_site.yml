@@ -7,7 +7,6 @@
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
-  #when: site.http_plain_template | default(True)
   notify:
     - systemctl reload nginx
 
@@ -19,7 +18,6 @@
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
-  #when: not site.redirect_target | default(True)
   notify:
     - systemctl reload nginx
 
@@ -56,23 +54,6 @@
   notify:
     - systemctl reload nginx
 
-#- name: Copy additional per site '{{ site.name }}' snippet files
-#  become: true
-#  template:
-#    src: 'files/nginx/snippets/{{ item }}'
-#    dest: '/etc/nginx/snippets/{{ item }}'
-#    owner: root
-#    group: root
-#    mode: 'u=rw,g=r,o=r'
-#  with_items: '{{ site.snippets }}'
-#  when: site.snippets | default([])
-#  notify:
-#    - systemctl reload nginx
-#  tags:
-#    - configuration
-#    - nginx
-#    - sites
-
 - name: Enable '{{ site.name }}' site plain http configuration
   become: true
   file:
@@ -84,11 +65,12 @@
     - systemctl reload nginx
 
 # Note: done by acmetool after sucessfully obtaining a suitable certificate
-#- name: Enable '{{ site.name }}' site tls configuration
-#  become: true
-#  file:
-#    src: '/etc/nginx/sites-available/{{ site.name }}_tls'
-#    dest: '/etc/nginx/sites-enabled/{{ site.name }}_tls'
-#    state: link
-#  notify:
-#    - systemctl reload nginx
+- name: Enable '{{ site.name }}' site tls configuration
+  become: true
+  file:
+    src: '/etc/nginx/sites-available/{{ site.name }}_tls'
+    dest: '/etc/nginx/sites-enabled/{{ site.name }}_tls'
+    state: link
+  notify:
+    - systemctl reload nginx
+  when: not nginx__acmetool_enabled

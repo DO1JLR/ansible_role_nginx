@@ -31,6 +31,4 @@
 
 - name: Configure acmetool and obtain certificates
   include_tasks: acme.yml
-  tags:
-    - configuration
-    - acme
+  when: nginx__acmetool_enabled
