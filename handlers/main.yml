@@ -1,14 +1,16 @@
 ---
 
 - name: Restart nginx
-  systemd:
+  become: true
+  ansible.builtin.systemd:
     name: 'nginx.service'
-    daemon_reload: yes
+    daemon_reload: true
     state: restarted
 
 
 - name: systemctl reload nginx
-  systemd:
+  become: true
+  ansible.builtin.systemd:
     name: 'nginx.service'
-    daemon_reload: yes
+    daemon_reload: true
     state: reloaded

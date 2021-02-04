@@ -4,7 +4,7 @@ submodules_versioncheck: false
 
 nginx_sites: {}
 
-#nginx_sites:
+# nginx_sites:
 #  - name: 'example.org'
 #    altnames:
 #      - 'www.example.org'
@@ -23,7 +23,7 @@ nginx__snippet_files:
   - 'tls_parameters.snippet.conf'
 
 
-#default_robots_file: 'robots_disallow_all.txt'
+# default_robots_file: 'robots_disallow_all.txt'
 
 
 nginx__dhparam_size: 4096

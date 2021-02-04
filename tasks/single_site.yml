@@ -2,7 +2,7 @@
 - name: Create '{{ site.name }}' site plain http configuration
   become: true
   template:
-    src:  'templates/nginx/sites-available/http_plain_redirect.conf.j2'
+    src: 'templates/nginx/sites-available/http_plain_redirect.conf.j2'
     dest: '/etc/nginx/sites-available/{{ site.name }}_http'
     owner: root
     group: root
