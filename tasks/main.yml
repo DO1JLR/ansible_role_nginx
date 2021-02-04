@@ -9,31 +9,21 @@
 - name: Configure nginx
   include_tasks: nginx.yml
 
-- name: Start nginx webserver
-  service:
+- name: start nginx webserver
+  ansible.builtin.systemd:
     name: nginx
     state: started
-    enabled: yes
-  tags:
-    - operation
-    - nginx
+    enabled: true
 
-- name: Configure nginx default site
+- name: configure nginx default site
   include_tasks: default_site.yml
-  tags:
-    - configuration
-    - nginx
-    - sites
+  when: nginx__infrastructure_domain__enabled | bool
 
 - name: Configure nginx sites
   include_tasks: single_site.yml
   with_items: '{{ nginx_sites }}'
   loop_control:
     loop_var: site
-  tags:
-    - configuration
-    - nginx
-    - sites
 
 # Restart nginx before doing acme stuff
 - name: Flush handlers to restart nginx now
