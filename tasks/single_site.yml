@@ -1,7 +1,7 @@
 ---
 - name: Create '{{ site.name }}' site plain http configuration
   become: true
-  template:
+  ansible.builtin.template:
     src: 'templates/nginx/sites-available/http_plain_redirect.conf.j2'
     dest: '/etc/nginx/sites-available/{{ site.name }}_http'
     owner: root
@@ -12,7 +12,7 @@
 
 - name: Create '{{ site.name }}' site tls https configuration
   become: true
-  template:
+  ansible.builtin.template:
     src: 'files/nginx/sites/{{ site.name }}_tls.conf'
     dest: '/etc/nginx/sites-available/{{ site.name }}_tls'
     owner: root
@@ -23,7 +23,7 @@
 
 - name: Create '{{ site.name }}' site tls parameter configuration
   become: true
-  template:
+  ansible.builtin.template:
     src: 'files/nginx/snippets/tls_parameters.snippet.conf'
     dest: '/etc/nginx/snippets/tls_parameters_{{ site.name }}.snippet.conf'
     owner: root
@@ -34,7 +34,7 @@
 
 - name: Create '{{ site.name }}' site tls certificate configuration
   become: true
-  template:
+  ansible.builtin.template:
     src: 'files/nginx/snippets/tls_certificate.snippet.conf'
     dest: '/etc/nginx/snippets/tls_certificate_{{ site.name }}.snippet.conf'
     owner: root
@@ -45,8 +45,8 @@
 
 - name: Create '{{ site.name }}' site logging configuration
   become: true
-  template:
-    src: 'files/nginx/snippets/logging.snippet.conf'
+  ansible.builtin.template:
+    src: 'templates/nginx/snippets/logging.snippet.conf.j2'
     dest: '/etc/nginx/snippets/logging_{{ site.name }}.snippet.conf'
     owner: root
     group: root
@@ -56,7 +56,7 @@
 
 - name: Enable '{{ site.name }}' site plain http configuration
   become: true
-  file:
+  ansible.builtin.file:
     src: '/etc/nginx/sites-available/{{ site.name }}_http'
     dest: '/etc/nginx/sites-enabled/{{ site.name }}_http'
     state: link
@@ -67,7 +67,7 @@
 # Note: done by acmetool after sucessfully obtaining a suitable certificate
 - name: Enable '{{ site.name }}' site tls configuration
   become: true
-  file:
+  ansible.builtin.file:
     src: '/etc/nginx/sites-available/{{ site.name }}_tls'
     dest: '/etc/nginx/sites-enabled/{{ site.name }}_tls'
     state: link

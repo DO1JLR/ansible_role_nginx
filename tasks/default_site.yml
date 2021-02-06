@@ -12,7 +12,7 @@
 
 - name: Create default site tls https configuration
   become: true
-  template:
+  ansible.builtin.template:
     src: 'templates/nginx/sites-available/default_tls.j2'
     dest: '/etc/nginx/sites-available/{{ inventory_hostname }}_tls'
     owner: root
@@ -23,7 +23,7 @@
 
 - name: Enable default site plain http configuration
   become: true
-  file:
+  ansible.builtin.file:
     src: '/etc/nginx/sites-available/{{ inventory_hostname }}_http'
     dest: '/etc/nginx/sites-enabled/{{ inventory_hostname }}_http'
     state: link
@@ -33,7 +33,7 @@
 # Note: Done by acmetool after sucessfully obtaining a suitable certificate
 - name: Enable default site configuration
   become: true
-  file:
+  ansible.builtin.file:
     src: '/etc/nginx/sites-available/{{ inventory_hostname }}_tls'
     dest: '/etc/nginx/sites-enabled/{{ inventory_hostname }}_tls'
     state: link

@@ -1,7 +1,7 @@
 ---
 - name: Update apt cache
   become: true
-  apt:
+  ansible.builtin.apt:
     cache_valid_time: 3600
     update_cache: true
   when:
@@ -9,7 +9,7 @@
 
 - name: Install nginx
   become: true
-  package:
+  ansible.builtin.package:
     name:
       - 'nginx'
     state: "{{ nxinx__state }}"

@@ -5,17 +5,18 @@ submodules_versioncheck: false
 nginx_sites: {}
 
 # nginx_sites:
-#  - name: 'example.org'
-#    altnames:
+#  - name: 'example.org'                  # required
+#    altnames:                            # Optional alternative names
 #      - 'www.example.org'
 #      - 'ftp.example.org'
-#    robots: 'robots_allow_all.txt'         Optional, unimplemented
-#    htaccess: 'htpasswd.example.org'       Optional, unimplemented
-#    webroot:                               Optional, for use with 'webhost' role
-#       path                                Optional, for use with 'webhost' role
-#       user                                Optional, for use with 'webhost' role
-#       group                               Optional, for use with 'webhost' role
-#       mode                                Optional, for use with 'webhost' role
+#    logging: false                       # Optional enable nginx logging
+#    robots: 'robots_allow_all.txt'       # Optional, unimplemented
+#    htaccess: 'htpasswd.example.org'     # Optional, unimplemented
+#    webroot:                             # Optional, for use with 'webhost' role
+#       path                              # Optional, for use with 'webhost' role
+#       user                              # Optional, for use with 'webhost' role
+#       group                             # Optional, for use with 'webhost' role
+#       mode                              # Optional, for use with 'webhost' role
 
 nginx__snippet_path: 'files/nginx/snippets/'
 nginx__snippet_files:
@@ -25,6 +26,8 @@ nginx__snippet_files:
 
 # default_robots_file: 'robots_disallow_all.txt'
 
+# nginx logging default for all sites
+nginx__default_enable_logging: false
 
 nginx__dhparam_size: 4096
 

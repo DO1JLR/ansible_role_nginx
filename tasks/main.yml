@@ -1,13 +1,13 @@
 ---
 - name: simple versionscheck
-  include_tasks: versioncheck.yml
+  ansible.builtin.include_tasks: versioncheck.yml
   when: submodules_versioncheck | bool
 
 - name: Install nginx
-  include_tasks: installation.yml
+  ansible.builtin.include_tasks: installation.yml
 
 - name: Configure nginx
-  include_tasks: nginx.yml
+  ansible.builtin.include_tasks: nginx.yml
 
 - name: start nginx webserver
   ansible.builtin.systemd:
@@ -16,19 +16,19 @@
     enabled: true
 
 - name: configure nginx default site
-  include_tasks: default_site.yml
+  ansible.builtin.include_tasks: default_site.yml
   when: nginx__infrastructure_domain__enabled | bool
 
 - name: Configure nginx sites
-  include_tasks: single_site.yml
+  ansible.builtin.include_tasks: single_site.yml
   with_items: '{{ nginx_sites }}'
   loop_control:
     loop_var: site
 
 # Restart nginx before doing acme stuff
 - name: Flush handlers to restart nginx now
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Configure acmetool and obtain certificates
-  include_tasks: acme.yml
+  ansible.builtin.include_tasks: acme.yml
   when: nginx__acmetool_enabled
