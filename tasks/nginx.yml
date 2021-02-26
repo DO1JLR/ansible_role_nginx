@@ -2,7 +2,9 @@
 - name: Copy main nginx configuration file
   become: true
   ansible.builtin.copy:
-    src: 'nginx/nginx.conf'
+  copy:
+    #src: 'files/nginx/nginx.conf'
+    src: '{{ lookup("hf", "nginx/nginx.conf") }}'
     dest: '/etc/nginx/'
     owner: root
     group: root
@@ -64,14 +66,13 @@
     group: root
     mode: 'u=rwx,g=rx,o=rx'
 
-- name: Copy nginx snippet files
-  become: true
-  ansible.builtin.copy:
-    src: '{{ nginx__snippet_path }}{{ item }}'
-    dest: '/etc/nginx/snippets/{{ item }}'
+- name: Copy nginx global configuration snippet files
+  copy:
+    src: '{{ item }}'
+    dest: '/etc/nginx/snippets/{{ item | basename }}'
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
-  with_items: '{{ nginx__snippet_files }}'
+  with_items: "{{ lookup('hfg', 'nginx/snippets/[!_]*_global.snippet.conf', wantlist=True) }}"
   notify:
     - systemctl reload nginx

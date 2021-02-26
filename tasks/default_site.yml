@@ -2,22 +2,31 @@
 - name: Create default site plain http configuration
   become: true
   ansible.builtin.template:
-    src: 'templates/nginx/sites-available/default_http.j2'
+    src: '{{ item }}'
     dest: '/etc/nginx/sites-available/{{ inventory_hostname }}_http'
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
+  with_first_found:
+    - files:
+        - 'files/nginx/sites/default_http.conf'
+        - 'files/nginx/sites-available/default_http.conf.j2'
   notify:
     - systemctl reload nginx
 
 - name: Create default site tls https configuration
   become: true
   ansible.builtin.template:
-    src: 'templates/nginx/sites-available/default_tls.j2'
+  template:
+    src: '{{ item }}'
     dest: '/etc/nginx/sites-available/{{ inventory_hostname }}_tls'
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
+  with_first_found:
+    - files:
+        - 'files/nginx/sites/default_tls.conf'
+        - 'files/nginx/sites-available/default_tls.conf.j2'
   notify:
     - systemctl reload nginx
 
@@ -39,4 +48,8 @@
     state: link
   notify:
     - systemctl reload nginx
-  when: not nginx__acmetool_enabled
+  when: nginx__disable_acmetool
+  tags:
+    - configuration
+    - nginx
+    - sites

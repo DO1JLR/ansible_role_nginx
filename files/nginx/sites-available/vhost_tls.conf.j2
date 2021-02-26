@@ -1,0 +1,14 @@
+server {
+        listen 443 ssl http2;
+        listen [::]:443 ssl http2;
+
+        server_name {{ site.name }};
+
+        include snippets/tls-parameters_global.snippet.conf;
+        include snippets/{{ site.name }}_certificate_site.snippet.conf;
+        include snippets/{{ site.name }}_logging_site.snippet.conf;
+
+        location ^~ / {
+                return 403;
+        }
+}

@@ -2,44 +2,56 @@
 - name: Create '{{ site.name }}' site plain http configuration
   become: true
   ansible.builtin.template:
-    src: 'templates/nginx/sites-available/http_plain_redirect.conf.j2'
+    src: '{{ item }}'
     dest: '/etc/nginx/sites-available/{{ site.name }}_http'
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
+  with_first_found:
+    - files:
+        - 'files/nginx/sites/{{ site.name }}_http.conf'
+        - 'files/nginx/sites-available/vhost_http_redirect.conf.j2'
   notify:
     - systemctl reload nginx
 
 - name: Create '{{ site.name }}' site tls https configuration
   become: true
   ansible.builtin.template:
-    src: 'files/nginx/sites/{{ site.name }}_tls.conf'
+  template:
+    src: '{{ item }}'
     dest: '/etc/nginx/sites-available/{{ site.name }}_tls'
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
+  with_first_found:
+    - files:
+        - 'files/nginx/sites/{{ site.name }}_tls.conf'
+        - 'files/nginx/sites-available/vhost_tls.conf.j2'
   notify:
     - systemctl reload nginx
 
 - name: Create '{{ site.name }}' site tls parameter configuration
   become: true
   ansible.builtin.template:
-    src: 'files/nginx/snippets/tls_parameters.snippet.conf'
-    dest: '/etc/nginx/snippets/tls_parameters_{{ site.name }}.snippet.conf'
+    src: '{{ item }}'
+    dest: '/etc/nginx/snippets/{{ site.name }}{{ item | basename }}'
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
+  with_items: "{{ lookup('hfg', 'nginx/snippets/_*_site.snippet.conf', wantlist=True) }}"
   notify:
     - systemctl reload nginx
 
 - name: Create '{{ site.name }}' site tls certificate configuration
   become: true
   ansible.builtin.template:
-    src: 'files/nginx/snippets/tls_certificate.snippet.conf'
-    dest: '/etc/nginx/snippets/tls_certificate_{{ site.name }}.snippet.conf'
+  template:
+    src: '{{ item }}'
+    dest: '/etc/nginx/snippets/{{ item | basename }}'
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
+  with_items: "{{ lookup('hfg', 'nginx/snippets/' + site.name + '_*_site.snippet.conf', wantlist=True) }}"
   notify:
     - systemctl reload nginx
 
@@ -57,14 +69,19 @@
 - name: Enable '{{ site.name }}' site plain http configuration
   become: true
   ansible.builtin.file:
+  file:
     src: '/etc/nginx/sites-available/{{ site.name }}_http'
     dest: '/etc/nginx/sites-enabled/{{ site.name }}_http'
     state: link
-  when: site.http_plain_template | default(True)
   notify:
     - systemctl reload nginx
+  tags:
+    - configuration
+    - nginx
+    - sites
 
-# Note: done by acmetool after sucessfully obtaining a suitable certificate
+
+# Note: Normally done by acmetool after sucessfully obtaining a suitable certificate
 - name: Enable '{{ site.name }}' site tls configuration
   become: true
   ansible.builtin.file:
@@ -73,4 +90,8 @@
     state: link
   notify:
     - systemctl reload nginx
-  when: not nginx__acmetool_enabled
+  when: nginx__disable_acmetool
+  tags:
+    - configuration
+    - nginx
+    - sites

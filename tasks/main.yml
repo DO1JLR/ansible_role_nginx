@@ -31,4 +31,7 @@
 
 - name: Configure acmetool and obtain certificates
   ansible.builtin.include_tasks: acme.yml
-  when: nginx__acmetool_enabled
+  when: not nginx__disable_acmetool
+  tags:
+    - configuration
+    - acme

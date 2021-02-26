@@ -11,5 +11,7 @@
   become: true
   ansible.builtin.package:
     name:
-      - 'nginx'
-    state: "{{ nxinx__state }}"
+    package: '{{ nginx__packages }}'
+    state: present
+  tags:
+    - installation
