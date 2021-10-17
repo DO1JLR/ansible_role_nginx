@@ -38,3 +38,6 @@ nginx__infrastructure_domain__enabled: true
 
 # disable this variable if you don't want to use our acmetool role to manage tls certificates
 nginx__acmetool_enabled: true
+
+nginx__user: 'www-data'
+nginx__group: 'www-data'
