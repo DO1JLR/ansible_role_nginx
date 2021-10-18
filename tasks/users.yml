@@ -1,0 +1,17 @@
+---
+- name: "create {{ nginx__group }} Group"
+  become: true
+  ansible.builtin.group:
+    name: "{{ nginx__group }}"
+    system: true
+    state: 'present'
+
+- name: "create {{ nginx__user }} user"
+  become: true
+  ansible.builtin.user:
+    name: "{{ nginx__user }}"
+    comment: "NGINX user"
+    home: '/var/www'
+    groups: "{{ nginx__group }}"
+    shell: '/usr/sbin/nologin'
+    system: true

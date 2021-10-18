@@ -6,6 +6,9 @@
 - name: Install nginx
   ansible.builtin.include_tasks: installation.yml
 
+- name: create nginx user and group
+  ansible.builtin.include_tasks: users.yml
+
 - name: Configure nginx
   ansible.builtin.include_tasks: nginx.yml
 
