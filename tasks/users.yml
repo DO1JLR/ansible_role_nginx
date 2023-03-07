@@ -1,12 +1,12 @@
 ---
-- name: "create {{ nginx__group }} Group"
+- name: "Create Group {{ nginx__group }}"
   become: true
   ansible.builtin.group:
     name: "{{ nginx__group }}"
     system: true
     state: 'present'
 
-- name: "create {{ nginx__user }} user"
+- name: "Create user {{ nginx__user }}"
   become: true
   ansible.builtin.user:
     name: "{{ nginx__user }}"

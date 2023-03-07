@@ -1,5 +1,5 @@
 ---
-- name: Create '{{ site.name }}' site plain http configuration
+- name: "Create site plain http configuration for '{{ site.name }}'"
   become: true
   ansible.builtin.template:
     src: 'templates/nginx/sites-available/http_plain_redirect.conf.j2'
@@ -8,9 +8,9 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
-- name: Create '{{ site.name }}' site tls https configuration
+- name: "Create site tls https configuration for '{{ site.name }}'"
   become: true
   ansible.builtin.template:
     src: 'files/nginx/sites/{{ site.name }}_tls.conf'
@@ -19,9 +19,9 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
-- name: Create '{{ site.name }}' site tls parameter configuration
+- name: "Create site tls parameter configuration for '{{ site.name }}'"
   become: true
   ansible.builtin.template:
     src: 'files/nginx/snippets/tls_parameters.snippet.conf'
@@ -30,9 +30,9 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
-- name: Create '{{ site.name }}' site tls certificate configuration
+- name: "Create site tls certificate configuration '{{ site.name }}'"
   become: true
   ansible.builtin.template:
     src: 'files/nginx/snippets/tls_certificate.snippet.conf'
@@ -41,9 +41,9 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
-- name: Create '{{ site.name }}' site logging configuration
+- name: "Create site logging configuration '{{ site.name }}'"
   become: true
   ansible.builtin.template:
     src: 'templates/nginx/snippets/logging.snippet.conf.j2'
@@ -52,9 +52,9 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
-- name: Enable '{{ site.name }}' site plain http configuration
+- name: "Enable site plain http configuration '{{ site.name }}'"
   become: true
   ansible.builtin.file:
     src: '/etc/nginx/sites-available/{{ site.name }}_http'
@@ -62,15 +62,15 @@
     state: link
   when: site.http_plain_template | default(True)
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
 # Note: done by acmetool after sucessfully obtaining a suitable certificate
-- name: Enable '{{ site.name }}' site tls configuration
+- name: "Enable site tls configuration '{{ site.name }}'"
   become: true
   ansible.builtin.file:
     src: '/etc/nginx/sites-available/{{ site.name }}_tls'
     dest: '/etc/nginx/sites-enabled/{{ site.name }}_tls'
     state: link
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
   when: not nginx__acmetool_enabled

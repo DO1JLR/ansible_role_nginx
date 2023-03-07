@@ -3,12 +3,12 @@
   become: true
   ansible.builtin.template:
     src: 'templates/nginx/nginx.conf.j2'
-    dest: '/etc/nginx/'
+    dest: '/etc/nginx/nginx.conf'
     owner: root
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
 - name: Create 'private' directory
   become: true
@@ -25,7 +25,7 @@
     path: '/etc/nginx/private/dhparam.pem'
     size: '{{ nginx__dhparam_size | mandatory }}'
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
 - name: Create 'sites-available' directory
   become: true
@@ -74,4 +74,4 @@
     mode: 'u=rw,g=r,o=r'
   with_items: '{{ nginx__snippet_files }}'
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
