@@ -8,7 +8,7 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
 - name: Create default site tls https configuration
   become: true
@@ -19,7 +19,7 @@
     group: root
     mode: 'u=rw,g=r,o=r'
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
 - name: Enable default site plain http configuration
   become: true
@@ -28,7 +28,7 @@
     dest: '/etc/nginx/sites-enabled/{{ inventory_hostname }}_http'
     state: link
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
 
 # Note: Done by acmetool after sucessfully obtaining a suitable certificate
 - name: Enable default site configuration
@@ -38,5 +38,5 @@
     dest: '/etc/nginx/sites-enabled/{{ inventory_hostname }}_tls'
     state: link
   notify:
-    - systemctl reload nginx
+    - Run systemctl reload nginx
   when: not nginx__acmetool_enabled

@@ -1,24 +1,24 @@
 ---
-- name: simple versionscheck
+- name: Simple versionscheck
   ansible.builtin.include_tasks: versioncheck.yml
   when: submodules_versioncheck | bool
 
 - name: Install nginx
   ansible.builtin.include_tasks: installation.yml
 
-- name: create nginx user and group
+- name: Create nginx user and group
   ansible.builtin.include_tasks: users.yml
 
 - name: Configure nginx
   ansible.builtin.include_tasks: nginx.yml
 
-- name: start nginx webserver
+- name: Start nginx webserver
   ansible.builtin.systemd:
     name: nginx
     state: started
     enabled: true
 
-- name: configure nginx default site
+- name: Configure nginx default site
   ansible.builtin.include_tasks: default_site.yml
   when: nginx__infrastructure_domain__enabled | bool
 

@@ -8,7 +8,7 @@
     state: restarted
 
 
-- name: systemctl reload nginx
+- name: Run systemctl reload nginx
   become: true
   ansible.builtin.systemd:
     name: 'nginx.service'

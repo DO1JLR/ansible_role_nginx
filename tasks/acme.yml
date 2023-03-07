@@ -1,7 +1,7 @@
 ---
 - name: Copy shell script to enable tls sites
   become: true
-  copy:
+  ansible.builtin.copy:
     src: 'files/acmetool/enable_tls.sh'
     dest: '/etc/acme/hooks/enable_tls.sh'
     owner: root
@@ -10,13 +10,15 @@
 
 - name: Get certificate for default server
   become: true
-  command: acmetool want '{{ inventory_hostname }}'
+  ansible.builtin.command:
+    cmd: "acmetool want '{{ inventory_hostname }}'"
   args:
     creates: '/var/lib/acme/live/{{ inventory_hostname }}'
 
 - name: Get certificates for all configured sites
   become: true
-  command: acmetool want '{{ ([site.name] + (site.altnames | default([]) )) | join(" ") }}'
+  ansible.builtin.command:
+    cmd: acmetool want '{{ ([site.name] + (site.altnames | default([]))) | join(" ") }}' -> acmetool want '{{ ([site.name] + (site.altnames | default([]))) | join(" ") }}'
   args:
     creates: '/var/lib/acme/live/{{ site.name }}/'
   with_items: '{{ nginx_sites }}'
