@@ -18,7 +18,8 @@
 - name: Get certificates for all configured sites
   become: true
   ansible.builtin.command:
-    cmd: acmetool want '{{ ([site.name] + (site.altnames | default([]))) | join(" ") }}' -> acmetool want '{{ ([site.name] + (site.altnames | default([]))) | join(" ") }}'
+    cmd: acmetool want '{{ ([site.name] + (site.altnames | default([]))) | join(" ") }}'
+    # -> acmetool want '{{ ([site.name] + (site.altnames | default([]))) | join(" ") }}'
   args:
     creates: '/var/lib/acme/live/{{ site.name }}/'
   with_items: '{{ nginx_sites }}'
