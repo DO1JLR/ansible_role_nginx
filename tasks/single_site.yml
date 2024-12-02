@@ -71,7 +71,6 @@
     src: '/etc/nginx/sites-available/{{ site.name }}_tls'
     dest: '/etc/nginx/sites-enabled/{{ site.name }}_tls'
     state: link
-    validate: bash -c 'echo "events { worker_connections 2; } http { include %s; }" > /tmp/nginx.conf; sudo nginx -T -c /tmp/nginx.conf; ec=$?; rm -f /tmp/nginx.conf; exit $ec'
   notify:
     - Run systemctl reload nginx
   when: not nginx__acmetool_enabled
